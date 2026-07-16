@@ -38,7 +38,7 @@ class PredictionService(IPredictionService):
                 'menu_item_name': self.encoders['menu_item_name'].transform([plato.nombre])[0],
                 'meal_type': self.encoders['meal_type'].transform(['Lunch'])[0],
                 'weather_condition': self.encoders['weather_condition'].transform([clima_encoded])[0],
-                'has_promotion': int(request.tiene_promo),
+                'has_promotion': 0,
                 'special_event': int(request.es_festivo),
                 'mes': ahora.month,
                 'dia_semana': ahora.weekday(),

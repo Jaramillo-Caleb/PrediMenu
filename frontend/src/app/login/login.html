@@ -1,0 +1,36 @@
+<div class="login-container">
+  <div class="login-box">
+    <i class="material-icons logo-icon">restaurant_menu</i>
+    <h1 class="app-title">PrediMenú</h1>
+
+    <div class="input-group">
+      <i class="material-icons input-icon">person</i>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        placeholder="Username"
+        class="input-field"
+      />
+    </div>
+
+    <div class="input-group">
+      <i class="material-icons input-icon">lock</i>
+      <input
+        [type]="obscurePass ? 'password' : 'text'"
+        [(ngModel)]="password"
+        placeholder="Password"
+        class="input-field"
+      />
+      <i
+        class="material-icons toggle-icon"
+        (click)="obscurePass = !obscurePass"
+      >
+        {{ obscurePass ? 'visibility_off' : 'visibility' }}
+      </i>
+    </div>
+
+    <p *ngIf="errorMsg" class="error-text">{{ errorMsg }}</p>
+
+    <button class="login-button" (click)="onLogin()">INGRESAR</button>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="dashboard-container">
+  <header class="topbar">
+    <h1 class="brand">PrediMenú</h1>
+    <div class="user-info">
+      <span>{{ username }}</span>
+      <button class="logout-btn" (click)="logout()">Salir</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab" (click)="irA('/dashboard')">Dashboard</button>
+    <button class="tab" (click)="irA('/monitoreo')">Monitoreo</button>
+    <button class="tab active" (click)="irA('/cierre')">Cierre</button>
+  </nav>
+
+  <main class="content">
+
+    <!-- Estado 1: ya se cerró, mostramos resultado -->
+    <div *ngIf="resultadosCierre.length > 0" class="card full-width">
+      <h2 class="card-title">Jornada cerrada — {{ exitosos }} de {{ resultadosCierre.length }} actualizados</h2>
+
+      <table class="platos-table">
+        <thead>
+          <tr>
+            <th>ID venta</th>
+            <th>Éxito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of resultadosCierre">
+            <td>{{ r.id_venta_plato }}</td>
+            <td>{{ r.exito ? 'Sí' : 'No' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="action-row">
+        <button class="generate-btn" (click)="nuevaJornada()">Empezar nueva jornada</button>
+      </div>
+    </div>
+
+    <!-- Estado 2: hay riesgo detectado, falta confirmar el cierre -->
+    <div *ngIf="resultadosCierre.length === 0 && filasPendientes.length > 0" class="card form-card">
+      <h2 class="card-title">Cierre de jornada</h2>
+      <p class="hint">Ciérrala cuando vendas todo o cuando se acabe el tiempo, aunque queden platos sin vender. Lo descartado se calcula solo.</p>
+
+      <table class="platos-table">
+        <thead>
+          <tr>
+            <th>Plato</th>
+            <th>Normal</th>
+            <th>Excedente</th>
+            <th>Descartado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fila of filasPendientes">
+            <td>{{ fila.nombre_plato }}</td>
+            <td><input class="field-input small" type="number" min="0" [(ngModel)]="fila.cantidad_normal" /></td>
+            <td><input class="field-input small" type="number" min="0" [(ngModel)]="fila.cantidad_excedente" /></td>
+            <td>{{ calcularDescartado(fila) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="action-row">
+        <button class="generate-btn outline" (click)="cerrarJornada()" [disabled]="loadingCierre">
+          {{ loadingCierre ? 'Cerrando...' : 'Cerrar jornada' }}
+        </button>
+      </div>
+
+      <div *ngIf="errorMsg" class="status-msg error">{{ errorMsg }}</div>
+    </div>
+
+    <!-- Estado 3: nada pendiente -->
+    <div *ngIf="resultadosCierre.length === 0 && filasPendientes.length === 0" class="card form-card">
+      <div class="status-msg error">
+        No hay una jornada en proceso de cierre. Ve a Monitoreo para verificar riesgo.
+      </div>
+    </div>
+
+  </main>
+</div>

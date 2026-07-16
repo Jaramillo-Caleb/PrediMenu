@@ -5,7 +5,6 @@ from typing import List
 class PredictionRequestDTO:
     id_platos: list[int]
     clima: int # 1=Soleado, 2=Lluvioso, 3=Nublado         
-    tiene_promo: bool
     es_festivo: bool
 
 @dataclass
